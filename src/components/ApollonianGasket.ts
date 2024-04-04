@@ -83,17 +83,15 @@ export default class ApollonianGasket {
       .sqrt()
       .scale(2)
 
-    const center1 = sum.add(root).scale(1 / k4[0])
-    const center2 = sum.sub(root).scale(1 / k4[0])
-    const center3 = sum.add(root).scale(1 / k4[1])
-    const center4 = sum.sub(root).scale(1 / k4[1])
+    return k4.flatMap(k => {
+      const centerAdd = sum.add(root).scale(1 / k)
+      const centerSub = sum.sub(root).scale(1 / k)
 
-    return [
-      new Circle(k4[0], center1.a, center1.b, this._p5, this._colors),
-      new Circle(k4[0], center2.a, center2.b, this._p5, this._colors),
-      new Circle(k4[1], center3.a, center3.b, this._p5, this._colors),
-      new Circle(k4[1], center4.a, center4.b, this._p5, this._colors),
-    ]
+      return [
+        new Circle(k, centerAdd.a, centerAdd.b, this._p5, this._colors),
+        new Circle(k, centerSub.a, centerSub.b, this._p5, this._colors)
+      ]
+    })
   }
 
   private validate ({ c1, c2, c3, c4 }: { c1: Circle, c2: Circle, c3: Circle, c4: Circle }): boolean {
