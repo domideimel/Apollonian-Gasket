@@ -59,6 +59,7 @@ export default class ApollonianGasket {
     const sum = k1 + k2 + k3
     const product = this._p5.abs(k1 * k2 + k2 * k3 + k1 * k3)
     const root = 2 * this._p5.sqrt(product)
+
     return [sum + root, sum - root]
   }
 
@@ -111,11 +112,13 @@ export default class ApollonianGasket {
 
   private isTangent (c1: Circle, c2: Circle): boolean {
     const d = c1.dist(c2)
+
     const r1 = c1.radius
     const r2 = c2.radius
 
     const a = this._p5.abs(d - (r1 + r2)) < this.EPSILON
     const b = this._p5.abs(d - this._p5.abs(r2 - r1)) < this.EPSILON
+
     return a || b
   }
 
