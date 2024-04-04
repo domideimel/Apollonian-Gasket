@@ -15,7 +15,7 @@ export class Complex {
     return new Complex(this.a * value, this.b * value, this._p5)
   }
 
-  mult (other: Complex) {
+  multiply (other: Complex) {
     const a = this.a * other.a - this.b * other.b
     const b = this.a * other.b + other.a * this.b
     return new Complex(a, b, this._p5)

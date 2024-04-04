@@ -35,8 +35,7 @@ export default class ApollonianGasket {
   }
 
   private nextGeneration () {
-    this._queue = this._queue.flatMap((triplet) => {
-      const [c1, c2, c3] = triplet
+    this._queue = this._queue.flatMap(([c1, c2, c3]) => {
       const k4 = this.descartes({ c1, c2, c3 })
       const newCircles = this.complexDescartes({ c1, c2, c3, k4 })
 
@@ -78,9 +77,9 @@ export default class ApollonianGasket {
     const sum = zk1.add(zk2).add(zk3)
 
     const root = zk1
-      .mult(zk2)
-      .add(zk2.mult(zk3))
-      .add(zk1.mult(zk3))
+      .multiply(zk2)
+      .add(zk2.multiply(zk3))
+      .add(zk1.multiply(zk3))
       .sqrt()
       .scale(2)
 
