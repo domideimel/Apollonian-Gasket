@@ -22,10 +22,8 @@ export class Complex {
   }
 
   sqrt () {
-    let m = this._p5.sqrt(this.a * this.a + this.b * this.b)
-    let angle = this._p5.atan2(this.b, this.a)
-    m = this._p5.sqrt(m)
-    angle = angle / 2
+    const m = this._p5.sqrt(this._p5.sqrt(this.a * this.a + this.b * this.b))
+    const angle = this._p5.atan2(this.b, this.a) / 2
     return new Complex(m * this._p5.cos(angle), m * this._p5.sin(angle), this._p5)
   }
 }
