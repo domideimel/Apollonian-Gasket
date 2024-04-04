@@ -3,40 +3,45 @@ import { Vector } from 'p5'
 import { Circle } from './Circle.ts'
 
 export default class ApollonianGasket {
-  private circles: Circle[] = []
-  private queue: Circle[][] = []
+  private _circles: Circle[] = []
+  private _queue: Circle[][] = []
+  private readonly _colors: P5.Color[] = []
 
   private readonly EPSILON = 0.1
 
   constructor (private _p5: P5) {
+    this._colors = [
+      this._p5.color(112, 50, 126),
+      this._p5.color(45, 197, 244),
+    ]
     this.start()
   }
 
   private start () {
-    const c1 = new Circle(-1 / (this._p5.width / 2), this._p5.width / 2, this._p5.height / 2, this._p5)
+    const c1 = new Circle(-1 / (this._p5.width / 2), this._p5.width / 2, this._p5.height / 2, this._p5, this._colors)
     const r2 = this._p5.random(100, c1.radius / 2)
     const v = Vector.fromAngle(this._p5.random(this._p5.TWO_PI))
     v.setMag(c1.radius - r2)
 
-    const c2 = new Circle(1 / r2, this._p5.width / 2 + v.x, this._p5.height / 2 + v.y, this._p5)
+    const c2 = new Circle(1 / r2, this._p5.width / 2 + v.x, this._p5.height / 2 + v.y, this._p5, this._colors)
     const r3 = v.mag()
     v.rotate(this._p5.PI)
     v.setMag(c1.radius - r3)
 
-    const c3 = new Circle(1 / r3, this._p5.width / 2 + v.x, this._p5.height / 2 + v.y, this._p5)
-    this.circles = [c1, c2, c3]
+    const c3 = new Circle(1 / r3, this._p5.width / 2 + v.x, this._p5.height / 2 + v.y, this._p5, this._colors)
+    this._circles = [c1, c2, c3]
 
-    this.queue = [[c1, c2, c3]]
+    this._queue = [[c1, c2, c3]]
   }
 
   private nextGeneration () {
-    this.queue = this.queue.flatMap((triplet) => {
+    this._queue = this._queue.flatMap((triplet) => {
       const [c1, c2, c3] = triplet
       const k4 = this.decartes({ c1, c2, c3 })
       const newCircles = this.complexDecartes({ c1, c2, c3, k4 })
 
       const validCircles = newCircles.filter(newCircle => this.validate({ c1, c2, c3, c4: newCircle }))
-      this.circles.push(...validCircles)
+      this._circles.push(...validCircles)
 
       return validCircles.flatMap(newCircle => [
         [c1, c2, newCircle],
@@ -85,17 +90,17 @@ export default class ApollonianGasket {
     const center4 = sum.sub(root).scale(1 / k4[1])
 
     return [
-      new Circle(k4[0], center1.a, center1.b, this._p5),
-      new Circle(k4[0], center2.a, center2.b, this._p5),
-      new Circle(k4[1], center3.a, center3.b, this._p5),
-      new Circle(k4[1], center4.a, center4.b, this._p5),
+      new Circle(k4[0], center1.a, center1.b, this._p5, this._colors),
+      new Circle(k4[0], center2.a, center2.b, this._p5, this._colors),
+      new Circle(k4[1], center3.a, center3.b, this._p5, this._colors),
+      new Circle(k4[1], center4.a, center4.b, this._p5, this._colors),
     ]
   }
 
   private validate ({ c1, c2, c3, c4 }: { c1: Circle, c2: Circle, c3: Circle, c4: Circle }): boolean {
     if (c4.radius < 2) return false
 
-    const isDistinct = this.circles.every(other => {
+    const isDistinct = this._circles.every(other => {
       const d = c4.dist(other)
       const radiusDiff = this._p5.abs(c4.radius - other.radius)
       return !(d < this.EPSILON && radiusDiff < this.EPSILON)
@@ -117,15 +122,15 @@ export default class ApollonianGasket {
   }
 
   draw () {
-    this._p5.background(255)
-    const len1 = this.queue.length
+    this._p5.background(this._p5.lerpColor(this._colors[0], this._p5.color('black'), 0.5))
+    const len1 = this._queue.length
     this.nextGeneration()
-    const len2 = this.queue.length
+    const len2 = this._queue.length
 
     if (len1 == len2) {
       this._p5.noLoop()
     }
 
-    this.circles.forEach(circle => circle.show())
+    this._circles.forEach(circle => circle.show())
   }
 }
