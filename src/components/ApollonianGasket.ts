@@ -37,8 +37,8 @@ export default class ApollonianGasket {
   private nextGeneration () {
     this._queue = this._queue.flatMap((triplet) => {
       const [c1, c2, c3] = triplet
-      const k4 = this.decartes({ c1, c2, c3 })
-      const newCircles = this.complexDecartes({ c1, c2, c3, k4 })
+      const k4 = this.descartes({ c1, c2, c3 })
+      const newCircles = this.complexDescartes({ c1, c2, c3, k4 })
 
       const validCircles = newCircles.filter(newCircle => this.validate({ c1, c2, c3, c4: newCircle }))
       this._circles.push(...validCircles)
@@ -51,7 +51,7 @@ export default class ApollonianGasket {
     })
   }
 
-  private decartes ({ c1, c2, c3 }: { c1: Circle, c2: Circle, c3: Circle }): number[] {
+  private descartes ({ c1, c2, c3 }: { c1: Circle, c2: Circle, c3: Circle }): number[] {
     const k1 = c1.bend
     const k2 = c2.bend
     const k3 = c3.bend
@@ -62,7 +62,7 @@ export default class ApollonianGasket {
     return [sum + root, sum - root]
   }
 
-  private complexDecartes ({ c1, c2, c3, k4 }: { c1: Circle, c2: Circle, c3: Circle, k4: number[] }): Circle[] {
+  private complexDescartes ({ c1, c2, c3, k4 }: { c1: Circle, c2: Circle, c3: Circle, k4: number[] }): Circle[] {
     const k1 = c1.bend
     const k2 = c2.bend
     const k3 = c3.bend
