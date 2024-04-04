@@ -19,8 +19,9 @@ export default class ApollonianGasket {
 
   private start () {
     const c1 = new Circle(-1 / (this._p5.width / 2), this._p5.width / 2, this._p5.height / 2, this._p5, this._colors)
-    const r2 = this._p5.random(100, c1.radius / 2)
     const v = Vector.fromAngle(this._p5.random(this._p5.TWO_PI))
+
+    const r2 = this._p5.random(100, c1.radius / 2)
     v.setMag(c1.radius - r2)
 
     const c2 = new Circle(1 / r2, this._p5.width / 2 + v.x, this._p5.height / 2 + v.y, this._p5, this._colors)
@@ -29,8 +30,8 @@ export default class ApollonianGasket {
     v.setMag(c1.radius - r3)
 
     const c3 = new Circle(1 / r3, this._p5.width / 2 + v.x, this._p5.height / 2 + v.y, this._p5, this._colors)
-    this._circles = [c1, c2, c3]
 
+    this._circles = [c1, c2, c3]
     this._queue = [[c1, c2, c3]]
   }
 
